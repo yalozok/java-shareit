@@ -9,6 +9,8 @@ import ru.practicum.shareit.item.dto.ItemCreateDto;
 import ru.practicum.shareit.item.dto.ItemDto;
 import ru.practicum.shareit.item.dto.ItemUpdateDto;
 import ru.practicum.shareit.item.model.Item;
+import ru.practicum.shareit.user.User;
+import ru.practicum.shareit.user.UserMapper;
 import ru.practicum.shareit.user.UserRepositoryImpl;
 
 import java.util.List;
@@ -22,10 +24,10 @@ public class ItemServiceImpl implements ItemService {
 
     @Override
     public ItemDto createItem(ItemCreateDto itemDto, long userId) {
-        userRepository.getUserById(userId)
+        User user = userRepository.getUserById(userId)
                 .orElseThrow(() -> new NotFoundUserException(userId));
         Item savedItem = itemRepository.createItem(ItemMapper.toModel(itemDto, userId));
-        return ItemMapper.toDto(savedItem);
+        return ItemMapper.toDto(savedItem, UserMapper.toDto(user));
     }
 
     @Override
@@ -44,31 +46,44 @@ public class ItemServiceImpl implements ItemService {
         if (itemDto.getAvailable() != null) {
             item.setAvailable(itemDto.getAvailable());
         }
+        long userId = item.getOwner();
+        User user = userRepository.getUserById(userId).orElseThrow(() -> new NotFoundUserException(userId));
 
         Item savedItem = itemRepository.updateItem(item);
-        return ItemMapper.toDto(savedItem);
+        return ItemMapper.toDto(savedItem, UserMapper.toDto(user));
     }
 
     @Override
     public ItemDto getItemById(long itemId) {
         Item item = itemRepository.getItemById(itemId)
                 .orElseThrow(() -> new NotFoundItemException(itemId));
-        return ItemMapper.toDto(item);
+        User user = userRepository.getUserById(item.getOwner())
+                .orElseThrow(() -> new NotFoundUserException(item.getOwner()));
+
+        return ItemMapper.toDto(item, UserMapper.toDto(user));
     }
 
     @Override
     public List<ItemDto> getItemsByUser(long userId) {
-        userRepository.getUserById(userId)
+        User user = userRepository.getUserById(userId)
                 .orElseThrow(() -> new NotFoundUserException(userId));
         List<Item> items = itemRepository.getItemsByUser(userId);
-        return items.stream().map(ItemMapper::toDto).collect(Collectors.toList());
+        return items.stream()
+                .map(item -> ItemMapper.toDto(item, UserMapper.toDto(user)))
+                .collect(Collectors.toList());
     }
 
 
     @Override
     public List<ItemDto> searchItem(String text) {
         List<Item> items = itemRepository.searchItem(text);
-        return items.stream().map(ItemMapper::toDto).collect(Collectors.toList());
+        return items.stream()
+                .map(item -> {
+                    User user = userRepository.getUserById(item.getOwner())
+                            .orElseThrow(() -> new NotFoundUserException(item.getOwner()));
+                    return ItemMapper.toDto(item, UserMapper.toDto(user));
+                })
+                .collect(Collectors.toList());
     }
 
     @Override
