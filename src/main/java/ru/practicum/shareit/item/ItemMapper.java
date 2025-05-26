@@ -35,8 +35,8 @@ public class ItemMapper {
     }
 
     public ItemDto toDtoWithRequest(@NotNull Item item,
-                                           @NotNull UserDto userDto,
-                                           @NotNull ItemRequestDto requestDto) {
+                                    @NotNull UserDto userDto,
+                                    @NotNull ItemRequestDto requestDto) {
         ItemDto dto = this.toDto(item, userDto);
         dto.setRequest(requestDto);
         return dto;
