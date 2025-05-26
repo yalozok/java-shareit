@@ -17,14 +17,15 @@ import java.util.List;
 public class UserServiceImpl implements UserService {
     private final UserRepository userRepository;
     private final ItemRepository itemRepository;
+    private final UserMapper userMapper;
 
     @Override
     public UserDto createUser(UserCreateDto userDto) {
         if (userRepository.isEmailExist(userDto.getEmail())) {
             throw new UserAlreadyExistException(userDto.getEmail());
         }
-        User user = userRepository.createUser(UserMapper.toModel(userDto));
-        return UserMapper.toDto(user);
+        User user = userRepository.createUser(userMapper.toModel(userDto));
+        return userMapper.toDto(user);
     }
 
     @Override
@@ -41,14 +42,14 @@ public class UserServiceImpl implements UserService {
             user.setEmail(userDto.getEmail());
         }
         User userSaved = userRepository.updateUser(user);
-        return UserMapper.toDto(userSaved);
+        return userMapper.toDto(userSaved);
     }
 
     @Override
     public UserDto getUserById(long userId) {
         User user = userRepository.getUserById(userId)
                 .orElseThrow(() -> new NotFoundUserException(userId));
-        return UserMapper.toDto(user);
+        return userMapper.toDto(user);
     }
 
     @Override
