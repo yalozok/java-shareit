@@ -4,13 +4,14 @@ import org.springframework.stereotype.Repository;
 
 import java.util.HashMap;
 import java.util.HashSet;
+import java.util.Map;
 import java.util.Optional;
 import java.util.Set;
 
 @Repository
 public class UserRepositoryImpl implements UserRepository {
-    HashMap<Long, User> users = new HashMap<>();
-    Set<String> uniqueEmails = new HashSet<>();
+    private final Map<Long, User> users = new HashMap<>();
+    private final Set<String> uniqueEmails = new HashSet<>();
     private long id = 0;
 
     @Override
