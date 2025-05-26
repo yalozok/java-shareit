@@ -21,13 +21,15 @@ import java.util.stream.Collectors;
 public class ItemServiceImpl implements ItemService {
     private final ItemRepositoryImpl itemRepository;
     private final UserRepositoryImpl userRepository;
+    private final UserMapper userMapper;
+    private final ItemMapper itemMapper;
 
     @Override
     public ItemDto createItem(ItemCreateDto itemDto, long userId) {
         User user = userRepository.getUserById(userId)
                 .orElseThrow(() -> new NotFoundUserException(userId));
-        Item savedItem = itemRepository.createItem(ItemMapper.toModel(itemDto, userId));
-        return ItemMapper.toDto(savedItem, UserMapper.toDto(user));
+        Item savedItem = itemRepository.createItem(itemMapper.toModel(itemDto, userId));
+        return itemMapper.toDto(savedItem, userMapper.toDto(user));
     }
 
     @Override
@@ -50,7 +52,7 @@ public class ItemServiceImpl implements ItemService {
         User user = userRepository.getUserById(userId).orElseThrow(() -> new NotFoundUserException(userId));
 
         Item savedItem = itemRepository.updateItem(item);
-        return ItemMapper.toDto(savedItem, UserMapper.toDto(user));
+        return itemMapper.toDto(savedItem, userMapper.toDto(user));
     }
 
     @Override
@@ -60,7 +62,7 @@ public class ItemServiceImpl implements ItemService {
         User user = userRepository.getUserById(item.getOwner())
                 .orElseThrow(() -> new NotFoundUserException(item.getOwner()));
 
-        return ItemMapper.toDto(item, UserMapper.toDto(user));
+        return itemMapper.toDto(item, userMapper.toDto(user));
     }
 
     @Override
@@ -69,7 +71,7 @@ public class ItemServiceImpl implements ItemService {
                 .orElseThrow(() -> new NotFoundUserException(userId));
         List<Item> items = itemRepository.getItemsByUser(userId);
         return items.stream()
-                .map(item -> ItemMapper.toDto(item, UserMapper.toDto(user)))
+                .map(item -> itemMapper.toDto(item, userMapper.toDto(user)))
                 .collect(Collectors.toList());
     }
 
@@ -81,7 +83,7 @@ public class ItemServiceImpl implements ItemService {
                 .map(item -> {
                     User user = userRepository.getUserById(item.getOwner())
                             .orElseThrow(() -> new NotFoundUserException(item.getOwner()));
-                    return ItemMapper.toDto(item, UserMapper.toDto(user));
+                    return itemMapper.toDto(item, userMapper.toDto(user));
                 })
                 .collect(Collectors.toList());
     }
