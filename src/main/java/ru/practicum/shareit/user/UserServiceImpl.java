@@ -21,46 +21,45 @@ public class UserServiceImpl implements UserService {
 
     @Override
     public UserDto createUser(UserCreateDto userDto) {
-        if (userRepository.isEmailExist(userDto.getEmail())) {
+        if (userRepository.existsByEmail(userDto.getEmail())) {
             throw new UserAlreadyExistException(userDto.getEmail());
         }
-        User user = userRepository.createUser(userMapper.toModel(userDto));
+        User user = userRepository.save(userMapper.toModel(userDto));
         return userMapper.toDto(user);
     }
 
     @Override
     public UserDto updateUser(UserUpdateDto userDto, long userId) {
-        User user = userRepository.getUserById(userId)
+        User user = userRepository.findById(userId)
                 .orElseThrow(() -> new NotFoundUserException(userId));
         if (userDto.getName() != null) {
             user.setName(userDto.getName());
         }
         if (userDto.getEmail() != null) {
-            if (userRepository.isEmailExist(userDto.getEmail())) {
+            if (userRepository.existsByEmail(userDto.getEmail())) {
                 throw new UserAlreadyExistException(userDto.getEmail());
             }
             user.setEmail(userDto.getEmail());
         }
-        User userSaved = userRepository.updateUser(user);
+        User userSaved = userRepository.save(user);
         return userMapper.toDto(userSaved);
     }
 
     @Override
     public UserDto getUserById(long userId) {
-        User user = userRepository.getUserById(userId)
+        User user = userRepository.findById(userId)
                 .orElseThrow(() -> new NotFoundUserException(userId));
         return userMapper.toDto(user);
     }
 
     @Override
     public void deleteUser(long id) {
-        userRepository.getUserById(id)
+        User user = userRepository.findById(id)
                 .orElseThrow(() -> new NotFoundUserException(id));
-        userRepository.deleteUser(id);
-        List<Item> itemsByUser = itemRepository.getItemsByUser(id);
-        for (Item item : itemsByUser) {
-            itemRepository.deleteItem(item.getId());
-        }
+        List<Item> itemsByUser = itemRepository.findByOwner(user);
+        System.out.println(itemsByUser);
+        itemRepository.deleteAll(itemsByUser);
+        userRepository.deleteById(id);
     }
 }
 
