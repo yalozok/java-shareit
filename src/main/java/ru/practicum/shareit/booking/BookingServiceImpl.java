@@ -25,7 +25,7 @@ import java.util.List;
 @Service
 @RequiredArgsConstructor
 public class BookingServiceImpl implements BookingService {
-    private final Sort SORT_NEW_OLD = Sort.by(Sort.Direction.DESC, "start");
+    private static final Sort SORT_NEW_OLD = Sort.by(Sort.Direction.DESC, "start");
     private final BookingRepository bookingRepository;
     private final ItemRepository itemRepository;
     private final UserRepository userRepository;

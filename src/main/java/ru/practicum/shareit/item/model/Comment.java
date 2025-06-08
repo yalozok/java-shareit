@@ -17,7 +17,7 @@ import ru.practicum.shareit.user.User;
 import java.time.LocalDateTime;
 
 @Entity
-@Table(name="comments")
+@Table(name = "comments")
 @Getter
 @Setter
 @NoArgsConstructor
@@ -33,7 +33,7 @@ public class Comment {
     private Item item;
 
     @ManyToOne(fetch = FetchType.EAGER)
-    @JoinColumn(name="author_id")
+    @JoinColumn(name = "author_id")
     private User author;
     LocalDateTime created;
 }
