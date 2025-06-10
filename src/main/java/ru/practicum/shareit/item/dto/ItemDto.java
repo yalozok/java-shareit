@@ -5,9 +5,6 @@ import ru.practicum.shareit.request.dto.ItemRequestDto;
 
 import java.util.List;
 
-/**
- * TODO Sprint add-controllers.
- */
 @Data
 public class ItemDto {
     private long id;
