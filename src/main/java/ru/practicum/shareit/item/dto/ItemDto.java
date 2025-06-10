@@ -3,6 +3,7 @@ package ru.practicum.shareit.item.dto;
 import lombok.Data;
 import ru.practicum.shareit.request.dto.ItemRequestDto;
 
+import java.time.LocalDateTime;
 import java.util.List;
 
 @Data
@@ -17,7 +18,7 @@ public class ItemDto {
     private BookingDto lastBooking;
     private BookingDto nextBooking;
 
-    public record BookingDto(long bookingId, long bookerId) {
+    public record BookingDto(long bookingId, LocalDateTime start, LocalDateTime end) {
     }
 
     public record UserDto(long userId, String userName) {

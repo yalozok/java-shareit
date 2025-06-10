@@ -98,13 +98,13 @@ public class ItemServiceImpl implements ItemService {
                     lastBookingOpt.ifPresent(
                             lastBooking -> itemDto.setLastBooking(
                                     new ItemDto.BookingDto(lastBooking.getId(),
-                                            lastBooking.getBooker().getId())));
+                                            lastBooking.getStart(), lastBooking.getEnd())));
 
                     Optional<Booking> nextBookingOpt = bookingRepository.findNextBooking(item.getId(), now);
                     nextBookingOpt.ifPresent(
                             nextBooking -> itemDto.setNextBooking(
                                     new ItemDto.BookingDto(nextBooking.getId(),
-                                            nextBooking.getBooker().getId()))
+                                            nextBooking.getStart(), nextBooking.getEnd()))
                     );
                     return itemDto;
                 })
