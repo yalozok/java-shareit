@@ -16,9 +16,6 @@ import ru.practicum.shareit.user.dto.UserCreateDto;
 import ru.practicum.shareit.user.dto.UserDto;
 import ru.practicum.shareit.user.dto.UserUpdateDto;
 
-/**
- * TODO Sprint add-controllers.
- */
 @RestController
 @RequestMapping(path = "/users")
 @RequiredArgsConstructor
@@ -37,7 +34,7 @@ public class UserController {
 
     @PatchMapping("/{userId}")
     UserDto updateUser(@Validated @RequestBody UserUpdateDto userDto,
-                       @PathVariable @PositiveOrZero Long userId) {
+                       @PathVariable @PositiveOrZero long userId) {
         log.info("==> Update user: {}", userDto);
         UserDto user = userService.updateUser(userDto, userId);
         log.info("<== User updated: {}", user);
@@ -45,7 +42,7 @@ public class UserController {
     }
 
     @GetMapping("/{userId}")
-    UserDto getUserById(@PathVariable @PositiveOrZero Long userId) {
+    UserDto getUserById(@PathVariable @PositiveOrZero long userId) {
         log.info("==> Get user: {}", userId);
         UserDto user = userService.getUserById(userId);
         log.info("<== User: {}", user);
@@ -53,7 +50,7 @@ public class UserController {
     }
 
     @DeleteMapping("/{userId}")
-    void deleteUser(@PathVariable @PositiveOrZero Long userId) {
+    void deleteUser(@PathVariable @PositiveOrZero long userId) {
         log.info("==> Delete user: {}", userId);
         userService.deleteUser(userId);
     }

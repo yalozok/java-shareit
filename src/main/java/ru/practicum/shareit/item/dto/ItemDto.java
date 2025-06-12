@@ -2,11 +2,10 @@ package ru.practicum.shareit.item.dto;
 
 import lombok.Data;
 import ru.practicum.shareit.request.dto.ItemRequestDto;
-import ru.practicum.shareit.user.dto.UserDto;
 
-/**
- * TODO Sprint add-controllers.
- */
+import java.time.LocalDateTime;
+import java.util.List;
+
 @Data
 public class ItemDto {
     private long id;
@@ -15,4 +14,13 @@ public class ItemDto {
     private boolean available;
     private UserDto owner;
     private ItemRequestDto request;
+    private List<CommentDto> comments;
+    private BookingDto lastBooking;
+    private BookingDto nextBooking;
+
+    public record BookingDto(long bookingId, LocalDateTime start, LocalDateTime end) {
+    }
+
+    public record UserDto(long userId, String userName) {
+    }
 }

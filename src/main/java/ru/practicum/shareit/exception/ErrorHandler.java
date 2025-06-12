@@ -19,6 +19,13 @@ import java.util.stream.Collectors;
 @Slf4j
 public class ErrorHandler {
     @ExceptionHandler
+    @ResponseStatus(HttpStatus.BAD_REQUEST)
+    public ErrorResponse handleNotAvailableItem(NotAvailableItemException e) {
+        log.info("400 {}", e.getMessage());
+        return new ErrorResponse(e.getMessage());
+    }
+
+    @ExceptionHandler
     @ResponseStatus(HttpStatus.NOT_FOUND)
     public ErrorResponse handleNotFoundItem(NotFoundItemException e) {
         log.info("404 {}", e.getMessage());
@@ -74,7 +81,7 @@ public class ErrorHandler {
     @ExceptionHandler
     @ResponseStatus(HttpStatus.BAD_REQUEST)
     public ErrorResponse handleBadRequest(ValidationException e) {
-        log.info("Validation: {}", e.getMessage());
+        log.trace("Validation: {}", e.getMessage());
         return new ErrorResponse(e.getMessage());
     }
 
