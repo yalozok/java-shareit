@@ -25,16 +25,12 @@ public class ErrorHandler {
         return new ErrorResponse(e.getMessage());
     }
 
-    @ExceptionHandler
+    @ExceptionHandler({NotFoundItemException.class,
+            NotFoundUserException.class,
+            NotFoundBookingException.class,
+            NotFoundRequestException.class})
     @ResponseStatus(HttpStatus.NOT_FOUND)
-    public ErrorResponse handleNotFoundItem(NotFoundItemException e) {
-        log.info("404 {}", e.getMessage());
-        return new ErrorResponse(e.getMessage());
-    }
-
-    @ExceptionHandler
-    @ResponseStatus(HttpStatus.NOT_FOUND)
-    public ErrorResponse handleNotFoundUser(NotFoundUserException e) {
+    public ErrorResponse handleNotFoundEntity(Exception e) {
         log.info("404 {}", e.getMessage());
         return new ErrorResponse(e.getMessage());
     }

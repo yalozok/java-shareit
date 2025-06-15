@@ -9,6 +9,7 @@ import ru.practicum.shareit.booking.model.Booking;
 import ru.practicum.shareit.booking.model.BookingStatus;
 import ru.practicum.shareit.exception.ForbiddenOperationException;
 import ru.practicum.shareit.exception.NotFoundItemException;
+import ru.practicum.shareit.exception.NotFoundRequestException;
 import ru.practicum.shareit.exception.NotFoundUserException;
 import ru.practicum.shareit.item.dto.CommentCreateDto;
 import ru.practicum.shareit.item.dto.CommentDto;
@@ -19,6 +20,8 @@ import ru.practicum.shareit.item.mapper.CommentMapper;
 import ru.practicum.shareit.item.mapper.ItemMapper;
 import ru.practicum.shareit.item.model.Comment;
 import ru.practicum.shareit.item.model.Item;
+import ru.practicum.shareit.request.ItemRequest;
+import ru.practicum.shareit.request.ItemRequestRepository;
 import ru.practicum.shareit.user.User;
 import ru.practicum.shareit.user.UserRepository;
 
@@ -35,6 +38,7 @@ public class ItemServiceImpl implements ItemService {
     private final UserRepository userRepository;
     private final CommentRepository commentRepository;
     private final BookingRepository bookingRepository;
+    private final ItemRequestRepository requestRepository;
     private final ItemMapper itemMapper;
     private final CommentMapper commentMapper;
 
@@ -42,7 +46,16 @@ public class ItemServiceImpl implements ItemService {
     public ItemDto createItem(ItemCreateDto itemDto, long ownerId) {
         User owner = userRepository.findById(ownerId)
                 .orElseThrow(() -> new NotFoundUserException(ownerId));
-        Item savedItem = itemRepository.save(itemMapper.toModel(itemDto, owner));
+        Long requestId = itemDto.getRequestId();
+        Item item;
+        if(requestId != null){
+            ItemRequest request = requestRepository.findById(requestId)
+                    .orElseThrow(() -> new NotFoundRequestException(requestId));
+            item = itemMapper.toModelWithRequest(itemDto, owner, request);
+        } else {
+            item = itemMapper.toModel(itemDto, owner);
+        }
+        Item savedItem = itemRepository.save(item);
         return itemMapper.toDto(savedItem, owner);
     }
 

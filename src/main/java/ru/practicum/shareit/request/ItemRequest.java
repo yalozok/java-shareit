@@ -17,9 +17,6 @@ import ru.practicum.shareit.user.User;
 
 import java.time.LocalDateTime;
 
-/**
- * TODO Sprint add-item-requests.
- */
 @Entity
 @Table(name = "requests")
 @Getter
@@ -33,7 +30,7 @@ public class ItemRequest {
     private Long id;
     private String description;
 
-    @ManyToOne(fetch = FetchType.EAGER)
+    @ManyToOne(fetch = FetchType.LAZY)
     @JoinColumn(name = "requestor_id")
     private User requestor;
 
