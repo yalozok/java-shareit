@@ -8,6 +8,7 @@ import ru.practicum.shareit.item.dto.CommentDto;
 import ru.practicum.shareit.item.dto.ItemCreateDto;
 import ru.practicum.shareit.item.dto.ItemDto;
 import ru.practicum.shareit.item.model.Item;
+import ru.practicum.shareit.request.ItemRequest;
 import ru.practicum.shareit.request.dto.ItemRequestDto;
 import ru.practicum.shareit.user.User;
 
@@ -23,6 +24,14 @@ public class ItemMapper {
         item.setDescription(itemDto.getDescription());
         item.setAvailable(itemDto.getAvailable());
         item.setOwner(user);
+        return item;
+    }
+
+    public Item toModelWithRequest(@NotNull @Valid ItemCreateDto itemDto,
+                                   @NotNull User user,
+                                   @NotNull ItemRequest request) {
+        Item item = toModel(itemDto, user);
+        item.setRequest(request);
         return item;
     }
 
