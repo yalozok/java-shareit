@@ -1,6 +1,5 @@
 package ru.practicum.shareit.request;
 
-import jakarta.validation.constraints.NotNull;
 import org.springframework.stereotype.Component;
 import org.springframework.validation.annotation.Validated;
 import ru.practicum.shareit.item.model.Item;
@@ -14,8 +13,8 @@ import java.util.List;
 @Component
 @Validated
 public class ItemRequestMapper {
-    public ItemRequest toModel(@NotNull ItemRequestCreateDto createDto,
-                               @NotNull User requestor) {
+    public ItemRequest toModel(ItemRequestCreateDto createDto,
+                               User requestor) {
         ItemRequest request = new ItemRequest();
         request.setDescription(createDto.getDescription());
         request.setRequestor(requestor);
@@ -23,7 +22,7 @@ public class ItemRequestMapper {
         return request;
     }
 
-    public ItemRequestDto toDto(@NotNull ItemRequest request) {
+    public ItemRequestDto toDto(ItemRequest request) {
         ItemRequestDto requestDto = new ItemRequestDto();
         requestDto.setId(request.getId());
         requestDto.setDescription(request.getDescription());
@@ -31,8 +30,8 @@ public class ItemRequestMapper {
         return requestDto;
     }
 
-    public ItemRequestDto toDtoWithItems(@NotNull ItemRequest request,
-                                           @NotNull List<Item> items) {
+    public ItemRequestDto toDtoWithItems(ItemRequest request,
+                                         List<Item> items) {
         ItemRequestDto requestDto = toDto(request);
         requestDto.setItems(items
                 .stream()

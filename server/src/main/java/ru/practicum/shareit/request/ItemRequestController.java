@@ -1,8 +1,6 @@
 package ru.practicum.shareit.request;
 
-import jakarta.validation.constraints.PositiveOrZero;
 import lombok.RequiredArgsConstructor;
-import lombok.Setter;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.validation.annotation.Validated;
 import org.springframework.web.bind.annotation.GetMapping;
@@ -20,7 +18,6 @@ import java.util.List;
 
 @RestController
 @RequestMapping(path = "/requests")
-@Validated
 @RequiredArgsConstructor
 @Slf4j
 public class ItemRequestController {
@@ -28,7 +25,7 @@ public class ItemRequestController {
     private final ItemRequestService requestService;
 
     @PostMapping
-    ItemRequestDto createRequest(@RequestHeader(SHARER_USER_ID) @PositiveOrZero long requestorId,
+    ItemRequestDto createRequest(@RequestHeader(SHARER_USER_ID) long requestorId,
             @Validated @RequestBody ItemRequestCreateDto requestCreateDto) {
         log.info("==> Create request: {}", requestCreateDto);
         ItemRequestDto requestDto = requestService.createRequest(
@@ -39,7 +36,7 @@ public class ItemRequestController {
     }
 
     @GetMapping
-    List<ItemRequestDto> getRequestsByRequestor(@RequestHeader(SHARER_USER_ID) @PositiveOrZero long requestorId) {
+    List<ItemRequestDto> getRequestsByRequestor(@RequestHeader(SHARER_USER_ID) long requestorId) {
         log.info("==> Get requests by requestor: {}", requestorId);
         List<ItemRequestDto> requests = requestService.getRequestsByRequestor(requestorId);
         log.info("<== Get all requests by requestor: {}", requests);
@@ -55,7 +52,7 @@ public class ItemRequestController {
     }
 
     @GetMapping("/{requestId}")
-    ItemRequestDto getRequestById(@PathVariable("requestId") @PositiveOrZero long requestId) {
+    ItemRequestDto getRequestById(@PathVariable("requestId") long requestId) {
         log.info("==> Get request by id: {}", requestId);
         ItemRequestDto requestDto = requestService.getRequestById(requestId);
         log.info("<== Get request by id: {}", requestDto);
