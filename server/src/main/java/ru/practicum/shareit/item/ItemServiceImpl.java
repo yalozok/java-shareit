@@ -1,6 +1,5 @@
 package ru.practicum.shareit.item;
 
-import jakarta.validation.ValidationException;
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
@@ -11,6 +10,7 @@ import ru.practicum.shareit.exception.ForbiddenOperationException;
 import ru.practicum.shareit.exception.NotFoundItemException;
 import ru.practicum.shareit.exception.NotFoundRequestException;
 import ru.practicum.shareit.exception.NotFoundUserException;
+import ru.practicum.shareit.exception.ValidationException;
 import ru.practicum.shareit.item.dto.CommentCreateDto;
 import ru.practicum.shareit.item.dto.CommentDto;
 import ru.practicum.shareit.item.dto.ItemCreateDto;
@@ -160,7 +160,7 @@ public class ItemServiceImpl implements ItemService {
 
         if (!booking.getEnd().isBefore(LocalDateTime.now())
                 || !booking.getStatus().equals(BookingStatus.APPROVED)) {
-            throw new ValidationException();
+            throw new ValidationException("You can leave a comment once your booking has ended");
         }
         Comment comment = commentRepository.save(commentMapper.toModel(commentCreateDto, item, author));
         return commentMapper.toDto(comment, author);
