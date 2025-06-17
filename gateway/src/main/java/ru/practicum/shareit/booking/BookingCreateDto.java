@@ -1,4 +1,4 @@
-package ru.practicum.shareit.booking.dto;
+package ru.practicum.shareit.booking;
 
 import jakarta.validation.constraints.AssertTrue;
 import jakarta.validation.constraints.Future;

@@ -1,8 +1,5 @@
 package ru.practicum.shareit.booking;
 
-import jakarta.validation.Valid;
-import jakarta.validation.constraints.NotNull;
-import jakarta.validation.constraints.PositiveOrZero;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.web.bind.annotation.GetMapping;
@@ -31,8 +28,8 @@ public class BookingController {
 
     @PostMapping()
     public BookingDto createBooking(
-            @RequestHeader(SHARER_USER_ID) @PositiveOrZero long bookerId,
-            @RequestBody @Valid BookingCreateDto booking) {
+            @RequestHeader(SHARER_USER_ID) long bookerId,
+            @RequestBody BookingCreateDto booking) {
         log.info("==> Create booking: {}", booking);
         BookingDto bookingDto = bookingService.createBooking(booking, bookerId);
         log.info("<== Created booking: {}", bookingDto);
@@ -41,8 +38,8 @@ public class BookingController {
 
     @PatchMapping("/{bookingId}")
     public BookingDto approveBooking(
-            @PathVariable("bookingId") @NotNull @PositiveOrZero long bookingId,
-            @RequestHeader(SHARER_USER_ID) @NotNull @PositiveOrZero long ownerId,
+            @PathVariable("bookingId") long bookingId,
+            @RequestHeader(SHARER_USER_ID) long ownerId,
             @RequestParam(name = "approved") boolean approved) {
         log.info("==> Approve booking: {}", bookingId);
         BookingDto booking = bookingService.approveBooking(bookingId, ownerId, approved);
@@ -52,8 +49,8 @@ public class BookingController {
 
     @GetMapping("/{bookingId}")
     public BookingDto getBookingById(
-            @RequestHeader(SHARER_USER_ID) @NotNull @PositiveOrZero long userId,
-            @PathVariable("bookingId") @NotNull @PositiveOrZero long bookingId) {
+            @RequestHeader(SHARER_USER_ID) long userId,
+            @PathVariable("bookingId") long bookingId) {
         log.info("==> Get booking: {}", bookingId);
         BookingDto booking = bookingService.getBookingById(userId, bookingId);
         log.info("<== Get the booking: {}", booking);
@@ -62,8 +59,8 @@ public class BookingController {
 
     @GetMapping
     public List<BookingDto> getBookingsByBooker(
-            @RequestHeader(SHARER_USER_ID) @NotNull @PositiveOrZero long bookerId,
-            @RequestParam(name = "state", defaultValue = "all") String state) {
+            @RequestHeader(SHARER_USER_ID) long bookerId,
+            @RequestParam(name = "state") String state) {
         log.info("==> Get bookings by booker: {}", bookerId);
         BookingState bookingState = BookingState.from(state)
                 .orElseThrow(() -> new ValidationException("Unknown state: " + state));
@@ -74,7 +71,7 @@ public class BookingController {
 
     @GetMapping("/owner")
     public List<BookingDto> getBookingsByOwner(
-            @RequestHeader(SHARER_USER_ID) @NotNull @PositiveOrZero long ownerId,
+            @RequestHeader(SHARER_USER_ID) long ownerId,
             @RequestParam(name = "state", defaultValue = "all") String state
     ) {
         log.info("==> Get bookings by owner: {}", ownerId);

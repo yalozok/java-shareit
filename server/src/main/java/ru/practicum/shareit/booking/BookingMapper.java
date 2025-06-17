@@ -1,6 +1,5 @@
 package ru.practicum.shareit.booking;
 
-import jakarta.validation.constraints.NotNull;
 import org.springframework.stereotype.Component;
 import org.springframework.validation.annotation.Validated;
 import ru.practicum.shareit.booking.dto.BookingCreateDto;
@@ -12,9 +11,8 @@ import ru.practicum.shareit.user.User;
 @Component
 @Validated
 public class BookingMapper {
-    public Booking toModel(@NotNull BookingCreateDto bookingDto,
-                           @NotNull User booker,
-                           @NotNull Item item) {
+    public Booking toModel(BookingCreateDto bookingDto,
+                           User booker, Item item) {
         Booking booking = new Booking();
         booking.setStart(bookingDto.getStart());
         booking.setEnd(bookingDto.getEnd());
@@ -23,7 +21,7 @@ public class BookingMapper {
         return booking;
     }
 
-    public BookingDto toDto(@NotNull Booking booking) {
+    public BookingDto toDto(Booking booking) {
         BookingDto bookingDto = new BookingDto();
         bookingDto.setId(booking.getId());
         bookingDto.setStart(booking.getStart());
