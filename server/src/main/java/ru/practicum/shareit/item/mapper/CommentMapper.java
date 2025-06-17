@@ -1,7 +1,5 @@
 package ru.practicum.shareit.item.mapper;
 
-import jakarta.validation.Valid;
-import jakarta.validation.constraints.NotNull;
 import org.springframework.stereotype.Component;
 import org.springframework.validation.annotation.Validated;
 import ru.practicum.shareit.item.dto.CommentCreateDto;
@@ -15,8 +13,8 @@ import java.time.LocalDateTime;
 @Component
 @Validated
 public class CommentMapper {
-    public Comment toModel(@NotNull @Valid CommentCreateDto commentDto,
-                           @NotNull Item item, @NotNull User user) {
+    public Comment toModel(CommentCreateDto commentDto,
+                           Item item, User user) {
         Comment comment = new Comment();
         comment.setText(commentDto.getText());
         comment.setItem(item);
@@ -25,7 +23,7 @@ public class CommentMapper {
         return comment;
     }
 
-    public CommentDto toDto(@NotNull Comment comment, @NotNull User user) {
+    public CommentDto toDto(Comment comment, User user) {
         CommentDto commentDto = new CommentDto();
         commentDto.setId(comment.getId());
         commentDto.setText(comment.getText());
