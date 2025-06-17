@@ -59,8 +59,9 @@ public class UserServiceImpl implements UserService {
         User user = userRepository.findById(id)
                 .orElseThrow(() -> new NotFoundUserException(id));
         List<Item> itemsByUser = itemRepository.findByOwner(user);
-        System.out.println(itemsByUser);
-        itemRepository.deleteAll(itemsByUser);
+        if (!itemsByUser.isEmpty()) {
+            itemRepository.deleteAll(itemsByUser);
+        }
         userRepository.deleteById(id);
     }
 }

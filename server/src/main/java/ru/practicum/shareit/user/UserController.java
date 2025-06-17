@@ -1,9 +1,7 @@
 package ru.practicum.shareit.user;
 
-import jakarta.validation.constraints.PositiveOrZero;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
-import org.springframework.validation.annotation.Validated;
 import org.springframework.web.bind.annotation.DeleteMapping;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PatchMapping;
@@ -19,13 +17,12 @@ import ru.practicum.shareit.user.dto.UserUpdateDto;
 @RestController
 @RequestMapping(path = "/users")
 @RequiredArgsConstructor
-@Validated
 @Slf4j
 public class UserController {
     private final UserService userService;
 
     @PostMapping
-    UserDto createUser(@Validated @RequestBody UserCreateDto userDto) {
+    UserDto createUser(@RequestBody UserCreateDto userDto) {
         log.info("==> Create user: {}", userDto);
         UserDto user = userService.createUser(userDto);
         log.info("<== User created: {}", user);
@@ -33,8 +30,8 @@ public class UserController {
     }
 
     @PatchMapping("/{userId}")
-    UserDto updateUser(@Validated @RequestBody UserUpdateDto userDto,
-                       @PathVariable @PositiveOrZero long userId) {
+    UserDto updateUser(@RequestBody UserUpdateDto userDto,
+                       @PathVariable long userId) {
         log.info("==> Update user: {}", userDto);
         UserDto user = userService.updateUser(userDto, userId);
         log.info("<== User updated: {}", user);
@@ -42,7 +39,7 @@ public class UserController {
     }
 
     @GetMapping("/{userId}")
-    UserDto getUserById(@PathVariable @PositiveOrZero long userId) {
+    UserDto getUserById(@PathVariable long userId) {
         log.info("==> Get user: {}", userId);
         UserDto user = userService.getUserById(userId);
         log.info("<== User: {}", user);
@@ -50,7 +47,7 @@ public class UserController {
     }
 
     @DeleteMapping("/{userId}")
-    void deleteUser(@PathVariable @PositiveOrZero long userId) {
+    void deleteUser(@PathVariable long userId) {
         log.info("==> Delete user: {}", userId);
         userService.deleteUser(userId);
     }
