@@ -48,7 +48,7 @@ public class ItemServiceImpl implements ItemService {
                 .orElseThrow(() -> new NotFoundUserException(ownerId));
         Long requestId = itemDto.getRequestId();
         Item item;
-        if(requestId != null){
+        if (requestId != null) {
             ItemRequest request = requestRepository.findById(requestId)
                     .orElseThrow(() -> new NotFoundRequestException(requestId));
             item = itemMapper.toModelWithRequest(itemDto, owner, request);
@@ -143,8 +143,10 @@ public class ItemServiceImpl implements ItemService {
 
     @Override
     public void deleteItem(Long itemId) {
-        itemRepository.findById(itemId)
+        Item item = itemRepository.findById(itemId)
                 .orElseThrow(() -> new NotFoundItemException(itemId));
+        bookingRepository.deleteByItem(item);
+        commentRepository.deleteByItem(item);
         itemRepository.deleteById(itemId);
     }
 
