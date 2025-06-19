@@ -65,18 +65,19 @@ public class ItemControllerTest {
     void updateItem() throws Exception {
         ItemDto item = new ItemDto(1, "Drill electric", "Electric drill with variable speed", true,
                 new ItemDto.UserDto(TestData.owner.getId(), TestData.owner.getName()), null, null, null, null);
-        when(itemService.updateItem(TestDto.itemUpdateDto, TestData.item1.getId())).thenReturn(item);
+        when(itemService.updateItem(TestData.owner.getId(), TestDto.itemUpdateDto, TestData.item1.getId())).thenReturn(item);
 
         mockMvc.perform(patch("/items/" + TestData.item1.getId())
                         .content(mapper.writeValueAsString(TestDto.itemUpdateDto))
                         .characterEncoding(StandardCharsets.UTF_8)
                         .contentType(MediaType.APPLICATION_JSON)
-                        .accept(MediaType.APPLICATION_JSON))
+                        .accept(MediaType.APPLICATION_JSON)
+                        .header("X-Sharer-User-Id", TestData.owner.getId()))
                 .andExpect(status().isOk())
                 .andExpect(jsonPath("$.id", is(1)))
                 .andExpect(jsonPath("$.name", is(TestDto.itemUpdateDto.getName())))
                 .andExpect(jsonPath("$.description", is(TestData.item1.getDescription())));
-        verify(itemService, times(1)).updateItem(TestDto.itemUpdateDto, TestData.item1.getId());
+        verify(itemService, times(1)).updateItem(TestData.owner.getId(), TestDto.itemUpdateDto, TestData.item1.getId());
     }
 
     @Test

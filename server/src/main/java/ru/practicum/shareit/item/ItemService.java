@@ -11,7 +11,7 @@ import java.util.List;
 public interface ItemService {
     ItemDto createItem(ItemCreateDto itemCreateDto, long userId);
 
-    ItemDto updateItem(ItemUpdateDto itemCreateDto, long itemId);
+    ItemDto updateItem(long ownerId, ItemUpdateDto itemCreateDto, long itemId);
 
     List<ItemDto> getItemsByUser(long userId);
 

@@ -33,36 +33,27 @@ public class ItemController {
     ResponseEntity<Object> createItem(@RequestHeader(SHARER_USER_ID) @NotNull @PositiveOrZero Long userId,
                                       @Validated @RequestBody ItemCreateDto itemDto) {
         log.info("==> Create new item: {}", itemDto);
-        ResponseEntity<Object> item = itemClient.createItem(userId, itemDto);
-        log.info("<== Created new item: {}", item);
-        return item;
+        return itemClient.createItem(userId, itemDto);
     }
 
     @PatchMapping("/{itemId}")
     ResponseEntity<Object> updateItem(@RequestHeader(SHARER_USER_ID) @NotNull @PositiveOrZero Long userId,
                                       @PathVariable @NotNull Long itemId,
                                       @Validated @RequestBody ItemUpdateDto itemDto) {
-        itemDto.setOwner(userId);
         log.info("==> Update item: {}", itemDto);
-        ResponseEntity<Object> item = itemClient.updateItem(itemId, itemDto);
-        log.info("<== Updated item: {}", item);
-        return item;
+        return itemClient.updateItem(userId, itemId, itemDto);
     }
 
     @GetMapping("/{itemId}")
     ResponseEntity<Object> getItemById(@PathVariable @PositiveOrZero @NotNull Long itemId) {
         log.info("==> Get item: {}", itemId);
-        ResponseEntity<Object> item = itemClient.getItemById(itemId);
-        log.info("<== Get the item: {}", item);
-        return item;
+        return itemClient.getItemById(itemId);
     }
 
     @GetMapping
     ResponseEntity<Object> getItemsByUser(@RequestHeader(SHARER_USER_ID) @PositiveOrZero @NotNull Long userId) {
         log.info("==> Get items by userId: {}", userId);
-        ResponseEntity<Object> items = itemClient.getItemsByUser(userId);
-        log.info("<== Get all items by userId: {}", items);
-        return items;
+        return itemClient.getItemsByUser(userId);
     }
 
     @GetMapping("/search")
@@ -84,8 +75,6 @@ public class ItemController {
                                             @Validated @RequestBody CommentCreateDto commentDto,
                                             @PathVariable @PositiveOrZero @NotNull Long itemId) {
         log.info("==> Add comment to item: {}", itemId);
-        ResponseEntity<Object> comment = itemClient.addComment(commentDto, itemId, userId);
-        log.info("<== Added comment to item: {}", comment);
-        return comment;
+        return itemClient.addComment(commentDto, itemId, userId);
     }
 }

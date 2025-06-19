@@ -48,7 +48,7 @@ public class ItemServiceImplTest {
 
     @Test
     void updateItemName_ItemUpdated() {
-        ItemDto item = itemService.updateItem(TestDto.itemUpdateDto, TestData.item1.getId());
+        ItemDto item = itemService.updateItem(TestData.owner.getId(), TestDto.itemUpdateDto, TestData.item1.getId());
         assertThat(item.getName(), equalTo(TestDto.itemUpdateDto.getName()));
 
         TypedQuery<Item> query = em.createQuery("SELECT i FROM Item i WHERE i.id = :itemId", Item.class);
@@ -62,7 +62,7 @@ public class ItemServiceImplTest {
     void updateNotExistingItem_NotFoundItemException() {
         NotFoundItemException exception = assertThrows(
                 NotFoundItemException.class,
-                () -> itemService.updateItem(TestDto.itemUpdateDto, Long.MAX_VALUE)
+                () -> itemService.updateItem(TestData.owner.getId(), TestDto.itemUpdateDto, Long.MAX_VALUE)
         );
         assertThat(exception.getMessage(), equalTo("Item not found: " + Long.MAX_VALUE));
     }
@@ -71,7 +71,7 @@ public class ItemServiceImplTest {
     void updateItemByNotOwner_ForbiddenOperationException() {
         ForbiddenOperationException exception = assertThrows(
                 ForbiddenOperationException.class,
-                () -> itemService.updateItem(TestDto.itemUpdateDtoByNotOwner, TestData.item1.getId())
+                () -> itemService.updateItem(TestData.requestor2.getId(), TestDto.itemUpdateDtoByNotOwner, TestData.item1.getId())
         );
         assertThat(exception.getMessage(), equalTo("Forbidden operation for this user: " +
                 TestDto.itemUpdateDtoByNotOwner.getOwner()));

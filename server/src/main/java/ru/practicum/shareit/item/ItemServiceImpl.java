@@ -60,10 +60,10 @@ public class ItemServiceImpl implements ItemService {
     }
 
     @Override
-    public ItemDto updateItem(ItemUpdateDto itemDto, long itemId) {
+    public ItemDto updateItem(long ownerId, ItemUpdateDto itemDto, long itemId) {
         Item item = itemRepository.findById(itemId)
                 .orElseThrow(() -> new NotFoundItemException(itemId));
-        long ownerId = item.getOwner().getId();
+
         if (!itemDto.getOwner().equals(ownerId)) {
             throw new ForbiddenOperationException(itemDto.getOwner());
         }
