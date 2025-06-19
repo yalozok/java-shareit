@@ -3,8 +3,10 @@ package ru.practicum.shareit.user;
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
+import ru.practicum.shareit.booking.BookingRepository;
 import ru.practicum.shareit.exception.NotFoundUserException;
 import ru.practicum.shareit.exception.UserAlreadyExistException;
+import ru.practicum.shareit.item.CommentRepository;
 import ru.practicum.shareit.item.ItemRepository;
 import ru.practicum.shareit.item.model.Item;
 import ru.practicum.shareit.user.dto.UserCreateDto;
@@ -19,14 +21,17 @@ import java.util.List;
 public class UserServiceImpl implements UserService {
     private final UserRepository userRepository;
     private final ItemRepository itemRepository;
+    private final BookingRepository bookingRepository;
     private final UserMapper userMapper;
+    private final CommentRepository commentRepository;
 
     @Override
     public UserDto createUser(UserCreateDto userDto) {
         if (userRepository.existsByEmail(userDto.getEmail())) {
             throw new UserAlreadyExistException(userDto.getEmail());
         }
-        User user = userRepository.save(userMapper.toModel(userDto));
+        User userToSave = userMapper.toModel(userDto);
+        User user = userRepository.save(userToSave);
         return userMapper.toDto(user);
     }
 
@@ -60,6 +65,10 @@ public class UserServiceImpl implements UserService {
                 .orElseThrow(() -> new NotFoundUserException(id));
         List<Item> itemsByUser = itemRepository.findByOwner(user);
         if (!itemsByUser.isEmpty()) {
+            for (Item item : itemsByUser) {
+                bookingRepository.deleteByItem(item);
+                commentRepository.deleteByItem(item);
+            }
             itemRepository.deleteAll(itemsByUser);
         }
         userRepository.deleteById(id);

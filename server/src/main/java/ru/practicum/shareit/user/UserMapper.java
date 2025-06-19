@@ -1,12 +1,10 @@
 package ru.practicum.shareit.user;
 
 import org.springframework.stereotype.Component;
-import org.springframework.validation.annotation.Validated;
 import ru.practicum.shareit.user.dto.UserCreateDto;
 import ru.practicum.shareit.user.dto.UserDto;
 
 @Component
-@Validated
 public class UserMapper {
     public User toModel(UserCreateDto userDto) {
         User user = new User();
