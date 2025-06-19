@@ -24,12 +24,12 @@ import java.util.List;
 @RequiredArgsConstructor
 public class BookingController {
     private static final String SHARER_USER_ID = "X-Sharer-User-Id";
-    private final BookingServiceImpl bookingService;
+    private final BookingService bookingService;
 
     @PostMapping()
     public BookingDto createBooking(
-            @RequestHeader(SHARER_USER_ID) long bookerId,
-            @RequestBody BookingCreateDto booking) {
+            @RequestBody BookingCreateDto booking,
+            @RequestHeader(SHARER_USER_ID) long bookerId) {
         log.info("==> Create booking: {}", booking);
         BookingDto bookingDto = bookingService.createBooking(booking, bookerId);
         log.info("<== Created booking: {}", bookingDto);
@@ -37,10 +37,10 @@ public class BookingController {
     }
 
     @PatchMapping("/{bookingId}")
-    public BookingDto approveBooking(
-            @PathVariable("bookingId") long bookingId,
-            @RequestHeader(SHARER_USER_ID) long ownerId,
-            @RequestParam(name = "approved") boolean approved) {
+            public BookingDto approveBooking(
+                    @PathVariable("bookingId") long bookingId,
+                    @RequestHeader(SHARER_USER_ID) long ownerId,
+                    @RequestParam(name = "approved") boolean approved) {
         log.info("==> Approve booking: {}", bookingId);
         BookingDto booking = bookingService.approveBooking(bookingId, ownerId, approved);
         log.info("<== Approved booking: {}", booking);

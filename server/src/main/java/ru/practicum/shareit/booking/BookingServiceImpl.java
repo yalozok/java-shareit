@@ -91,10 +91,10 @@ public class BookingServiceImpl implements BookingService {
         LocalDateTime now = LocalDateTime.now();
         List<Booking> bookings = switch (bookingState) {
             case BookingState.ALL -> bookingRepository.findAllByBooker_Id(bookerId, SORT_NEW_OLD);
-            case BookingState.PAST -> bookingRepository.findAllByBooker_IdAndEndBefore(bookerId, now, SORT_NEW_OLD);
-            case BookingState.FUTURE -> bookingRepository.findAllByBooker_IdAndStartAfter(bookerId, now, SORT_NEW_OLD);
+            case BookingState.PAST -> bookingRepository.findPastByBookerId(bookerId, now);
+            case BookingState.FUTURE -> bookingRepository.findFutureByBookerId(bookerId, now);
             case BookingState.CURRENT ->
-                    bookingRepository.findAllByBooker_IdAndStartBeforeAndEndAfter(bookerId, now, now, SORT_NEW_OLD);
+                    bookingRepository.findCurrentByBookerId(bookerId, now, now);
             case BookingState.WAITING ->
                     bookingRepository.findAllByBooker_IdAndStatus(bookerId, BookingStatus.WAITING, SORT_NEW_OLD);
             case BookingState.REJECTED ->
@@ -114,16 +114,16 @@ public class BookingServiceImpl implements BookingService {
 
         LocalDateTime now = LocalDateTime.now();
         List<Booking> bookings = switch (bookingState) {
-            case BookingState.ALL -> bookingRepository.findAllByItemOwner_Id(ownerId, SORT_NEW_OLD);
-            case BookingState.PAST -> bookingRepository.findAllByItemOwner_IdAndEndBefore(ownerId, now, SORT_NEW_OLD);
+            case BookingState.ALL -> bookingRepository.findAllByOwner_Id(ownerId);
+            case BookingState.PAST -> bookingRepository.findPastByOwnerId(ownerId, now);
             case BookingState.FUTURE ->
-                    bookingRepository.findAllByItemOwner_IdAndStartAfter(ownerId, now, SORT_NEW_OLD);
+                    bookingRepository.findFutureByItemOwnerId(ownerId, now);
             case BookingState.CURRENT ->
-                    bookingRepository.findAllByItemOwner_IdAndStartBeforeAndEndAfter(ownerId, now, now, SORT_NEW_OLD);
+                    bookingRepository.findCurrentByOwnerId(ownerId, now, now);
             case BookingState.WAITING ->
-                    bookingRepository.findAllByItemOwner_IdAndStatus(ownerId, BookingStatus.WAITING, SORT_NEW_OLD);
+                    bookingRepository.findAllByOwnerIdAndStatus(ownerId, BookingStatus.WAITING);
             case BookingState.REJECTED ->
-                    bookingRepository.findAllByItemOwner_IdAndStatus(ownerId, BookingStatus.REJECTED, SORT_NEW_OLD);
+                    bookingRepository.findAllByOwnerIdAndStatus(ownerId, BookingStatus.REJECTED);
         };
         return bookings.stream().map(bookingMapper::toDto).toList();
     }
