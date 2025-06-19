@@ -59,5 +59,4 @@ public class ItemRequestService {
                 .orElseGet(ArrayList::new);
         return requestMapper.toDtoWithItems(request, items);
     }
-
 }

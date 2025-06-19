@@ -27,7 +27,7 @@ public class ItemRequestClient extends BaseClient {
         return post("", requestorId, requestDto);
     }
 
-    public ResponseEntity<Object> getRequestsByRequestor (long requestorId) {
+    public ResponseEntity<Object> getRequestsByRequestor(long requestorId) {
         return get("", requestorId);
     }
 
