@@ -28,34 +28,24 @@ public class ItemRequestController {
     ResponseEntity<Object> createRequest(@RequestHeader(SHARER_USER_ID) @NotNull @PositiveOrZero Long requestorId,
                                          @Validated @RequestBody ItemRequestCreateDto requestCreateDto) {
         log.info("==> Create request: {}", requestCreateDto);
-        ResponseEntity<Object> requestDto = requestClient.createRequest(
-                requestorId, requestCreateDto
-        );
-        log.info("<== Created request: {}", requestDto);
-        return requestDto;
+        return requestClient.createRequest(requestorId, requestCreateDto);
     }
 
     @GetMapping
     ResponseEntity<Object> getRequestsByRequestor(@RequestHeader(SHARER_USER_ID) @NotNull @PositiveOrZero Long requestorId) {
         log.info("==> Get requests by requestor: {}", requestorId);
-        ResponseEntity<Object> requests = requestClient.getRequestsByRequestor(requestorId);
-        log.info("<== Get all requests by requestor: {}", requests);
-        return requests;
+        return requestClient.getRequestsByRequestor(requestorId);
     }
 
     @GetMapping("/all")
     ResponseEntity<Object> getAllRequests() {
         log.info("==> Get all requests");
-        ResponseEntity<Object> requests = requestClient.getAllRequests();
-        log.info("<== Get all requests");
-        return requests;
+        return requestClient.getAllRequests();
     }
 
     @GetMapping("/{requestId}")
     ResponseEntity<Object> getRequestById(@PathVariable("requestId") @NotNull @PositiveOrZero Long requestId) {
         log.info("==> Get request by id: {}", requestId);
-        ResponseEntity<Object> requestDto = requestClient.getRequestById(requestId);
-        log.info("<== Get request by id: {}", requestDto);
-        return requestDto;
+        return requestClient.getRequestById(requestId);
     }
 }

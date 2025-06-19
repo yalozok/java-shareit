@@ -24,26 +24,20 @@ public class UserController {
     @PostMapping
     UserDto createUser(@RequestBody UserCreateDto userDto) {
         log.info("==> Create user: {}", userDto);
-        UserDto user = userService.createUser(userDto);
-        log.info("<== User created: {}", user);
-        return user;
+        return userService.createUser(userDto);
     }
 
     @PatchMapping("/{userId}")
     UserDto updateUser(@RequestBody UserUpdateDto userDto,
                        @PathVariable long userId) {
         log.info("==> Update user: {}", userDto);
-        UserDto user = userService.updateUser(userDto, userId);
-        log.info("<== User updated: {}", user);
-        return user;
+        return userService.updateUser(userDto, userId);
     }
 
     @GetMapping("/{userId}")
     UserDto getUserById(@PathVariable long userId) {
         log.info("==> Get user: {}", userId);
-        UserDto user = userService.getUserById(userId);
-        log.info("<== User: {}", user);
-        return user;
+        return userService.getUserById(userId);
     }
 
     @DeleteMapping("/{userId}")

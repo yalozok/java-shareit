@@ -31,20 +31,16 @@ public class BookingController {
             @RequestBody BookingCreateDto booking,
             @RequestHeader(SHARER_USER_ID) long bookerId) {
         log.info("==> Create booking: {}", booking);
-        BookingDto bookingDto = bookingService.createBooking(booking, bookerId);
-        log.info("<== Created booking: {}", bookingDto);
-        return bookingDto;
+        return bookingService.createBooking(booking, bookerId);
     }
 
     @PatchMapping("/{bookingId}")
-            public BookingDto approveBooking(
-                    @PathVariable("bookingId") long bookingId,
-                    @RequestHeader(SHARER_USER_ID) long ownerId,
-                    @RequestParam(name = "approved") boolean approved) {
+    public BookingDto approveBooking(
+            @PathVariable("bookingId") long bookingId,
+            @RequestHeader(SHARER_USER_ID) long ownerId,
+            @RequestParam(name = "approved") boolean approved) {
         log.info("==> Approve booking: {}", bookingId);
-        BookingDto booking = bookingService.approveBooking(bookingId, ownerId, approved);
-        log.info("<== Approved booking: {}", booking);
-        return booking;
+        return bookingService.approveBooking(bookingId, ownerId, approved);
     }
 
     @GetMapping("/{bookingId}")
@@ -52,9 +48,7 @@ public class BookingController {
             @RequestHeader(SHARER_USER_ID) long userId,
             @PathVariable("bookingId") long bookingId) {
         log.info("==> Get booking: {}", bookingId);
-        BookingDto booking = bookingService.getBookingById(userId, bookingId);
-        log.info("<== Get the booking: {}", booking);
-        return booking;
+        return bookingService.getBookingById(userId, bookingId);
     }
 
     @GetMapping
@@ -64,9 +58,7 @@ public class BookingController {
         log.info("==> Get bookings by booker: {}", bookerId);
         BookingState bookingState = BookingState.from(state)
                 .orElseThrow(() -> new ValidationException("Unknown state: " + state));
-        List<BookingDto> bookings = bookingService.getBookingsByBooker(bookerId, bookingState);
-        log.info("<== Get all bookings by booker: {}", bookings);
-        return bookings;
+        return bookingService.getBookingsByBooker(bookerId, bookingState);
     }
 
     @GetMapping("/owner")
@@ -77,8 +69,6 @@ public class BookingController {
         log.info("==> Get bookings by owner: {}", ownerId);
         BookingState bookingState = BookingState.from(state)
                 .orElseThrow(() -> new ValidationException("Unknown state: " + state));
-        List<BookingDto> bookings = bookingService.getBookingsByOwner(ownerId, bookingState);
-        log.info("<== Get all bookings by owner: {}", bookings);
-        return bookings;
+        return bookingService.getBookingsByOwner(ownerId, bookingState);
     }
 }

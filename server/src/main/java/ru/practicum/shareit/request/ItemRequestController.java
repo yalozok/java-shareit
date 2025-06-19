@@ -14,7 +14,6 @@ import ru.practicum.shareit.request.dto.ItemRequestDto;
 
 import java.util.List;
 
-
 @RestController
 @RequestMapping(path = "/requests")
 @RequiredArgsConstructor
@@ -27,34 +26,24 @@ public class ItemRequestController {
     ItemRequestDto createRequest(@RequestHeader(SHARER_USER_ID) long requestorId,
                                  @RequestBody ItemRequestCreateDto requestCreateDto) {
         log.info("==> Create request: {}", requestCreateDto);
-        ItemRequestDto requestDto = requestService.createRequest(
-                requestCreateDto, requestorId
-        );
-        log.info("<== Created request: {}", requestDto);
-        return requestDto;
+        return requestService.createRequest(requestCreateDto, requestorId);
     }
 
     @GetMapping
     List<ItemRequestDto> getRequestsByRequestor(@RequestHeader(SHARER_USER_ID) long requestorId) {
         log.info("==> Get requests by requestor: {}", requestorId);
-        List<ItemRequestDto> requests = requestService.getRequestsByRequestor(requestorId);
-        log.info("<== Get all requests by requestor: {}", requests);
-        return requests;
+        return requestService.getRequestsByRequestor(requestorId);
     }
 
     @GetMapping("/all")
     List<ItemRequestDto> getAllRequests() {
         log.info("==> Get all requests");
-        List<ItemRequestDto> requests = requestService.getAllRequests();
-        log.info("<== Get all requests");
-        return requests;
+        return requestService.getAllRequests();
     }
 
     @GetMapping("/{requestId}")
     ItemRequestDto getRequestById(@PathVariable("requestId") long requestId) {
         log.info("==> Get request by id: {}", requestId);
-        ItemRequestDto requestDto = requestService.getRequestById(requestId);
-        log.info("<== Get request by id: {}", requestDto);
-        return requestDto;
+        return requestService.getRequestById(requestId);
     }
 }
